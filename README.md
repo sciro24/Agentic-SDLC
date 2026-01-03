@@ -1,28 +1,29 @@
 # Agentic SDLC
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Try_Now-success?style=for-the-badge&logo=vercel)](https://agentic-sdlc-iota.vercel.app/)
+
 ## Overview
 Agentic SDLC is an intelligent, automated development tool designed to streamline the software lifecycle. Leveraging Google's advanced Gemini models and an Agentic workflow, it provides instant documentation, quality audits, and code optimization proposals through a unified, modern interface.
 
+### [🚀 Try the Live Demo](https://agentic-sdlc-iota.vercel.app/)
+
 ## Visual Walkthrough
 
-<table width="100%">
-  <tr>
-    <th width="50%">Home Dashboard</th>
-    <th width="50%">Automated Documentation</th>
-  </tr>
-  <tr>
-    <td><img src="screenshots/Home.png" alt="Home Dashboard" /></td>
-    <td><img src="screenshots/Documentation.png" alt="Documentation Agent" /></td>
-  </tr>
-  <tr>
-    <th width="50%">Quality Audit</th>
-    <th width="50%">Optimization & Diffing</th>
-  </tr>
-  <tr>
-    <td><img src="screenshots/Quality%20Report.png" alt="Quality Audit Agent" /></td>
-    <td><img src="screenshots/Optimization.png" alt="Optimization Agent" /></td>
-  </tr>
-</table>
+<div align="center">
+  <img src="screenshots/Home.png" width="45%" alt="Home Dashboard" />
+  <img src="screenshots/Documentation.png" width="45%" alt="Documentation" />
+</div>
+<div align="center">
+  <img src="screenshots/Quality%20Report.png" width="45%" alt="Quality Audit" />
+  <img src="screenshots/Optimization.png" width="45%" alt="Optimization" />
+</div>
 
 ## Key Features
 - **Automated Documentation**: Utilizes a Technical Writer Agent to generate comprehensive, professional Markdown documentation.
