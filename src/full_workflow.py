@@ -25,35 +25,37 @@ class ADKWorkflow:
             "gemini-1.0-pro"
         ]
 
-    def _generate(self, prompt: str) -> str:
+    async def _generate_async(self, prompt: str) -> str:
+        # Wrap synchronous blocking call in a thread
+        import asyncio
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(None, self._generate_sync, prompt)
+
+    def _generate_sync(self, prompt: str) -> str:
         last_error = None
         for model in self.model_candidates:
             try:
-                # print(f"Trying model: {model}...") 
                 res = self.client.models.generate_content(
                     model=model,
                     contents=prompt
                 )
                 return res.text
             except Exception as e:
-                # print(f"Model {model} failed: {e}")
                 last_error = e
                 continue
-        
         print(f"All models failed. Last error: {last_error}")
-        return f"Error generating content: {last_error}"
+        return f"Error: {last_error}"
 
-    def run_workflow(self, code_content: str) -> Dict[str, Any]:
+    async def run_workflow(self, code_content: str) -> Dict[str, Any]:
         results = {
             "documentation": "",
             "evaluation": {},
             "optimization": None
         }
 
-        print(">>> [ADK] Starting Workflow...")
-
-        # 1. Documentation Agent
-        print(">>> [ADK] Agent: Technical Writer running...")
+        print(">>> [ADK] Starting Parallel Workflow...")
+        
+        # Define Prompts
         doc_prompt = f"""
         You are an expert Technical Writer using the Google ADK methodology.
         Generate comprehensive Markdown documentation for this code.
@@ -67,10 +69,7 @@ class ADKWorkflow:
         {code_content}
         ```
         """
-        results["documentation"] = self._generate(doc_prompt)
-
-        # 2. Evaluation Agent
-        print(">>> [ADK] Agent: Quality Auditor running...")
+        
         eval_prompt = f"""
         You are a QA Lead. Evaluate the User's code.
         Output strictly JSON format.
@@ -89,18 +88,38 @@ class ADKWorkflow:
         ```python
         {code_content}
         ```
-        
         Output only JSON.
         """
-        eval_raw = self._generate(eval_prompt)
         
-        # Parse JSON
+        opt_prompt = f"""
+        You are a Performance Engineer.
+        Optimize the following Python code for Time and Space complexity.
+        If the code is already optimal, just return the original.
+        Return ONLY the Python code block.
+        
+        Code:
+        ```python
+        {code_content}
+        ```
+        """
+
+        # Execute in Parallel
+        import asyncio
+        task_doc = asyncio.create_task(self._generate_async(doc_prompt))
+        task_eval = asyncio.create_task(self._generate_async(eval_prompt))
+        task_opt = asyncio.create_task(self._generate_async(opt_prompt))
+
+        print(">>> [ADK] Agents Running concurrently...")
+        
+        # Wait for all
+        doc_res, eval_res, opt_res = await asyncio.gather(task_doc, task_eval, task_opt)
+
+        results["documentation"] = doc_res
+        
+        # Process Eval
         try:
-            # Strip markdown code blocks if present
-            clean_json = re.sub(r'```json|```', '', eval_raw).strip()
+            clean_json = re.sub(r'```json|```', '', eval_res).strip()
             eval_data = json.loads(clean_json)
-            
-            # Flatten for frontend convenience
             results["evaluation"] = {
                 "technical_accuracy": eval_data.get("scores", {}).get("technical_accuracy", 0),
                 "completeness": eval_data.get("scores", {}).get("completeness", 0),
@@ -110,36 +129,18 @@ class ADKWorkflow:
             }
         except Exception as e:
             print(f"JSON Parsing failed: {e}")
-            results["evaluation"] = {
-                "technical_accuracy": 0,
-                "completeness": 0,
-                "readability": 0,
-                "feedback": f"Failed to parse Agent output: {eval_raw}",
-                "needs_optimization": True
-            }
+            results["evaluation"] = {"feedback": "Error parsing evaluation", "needs_optimization": False}
 
-        # 3. Optimization Agent (Conditional)
+        # Process Opt (Only keep if needed or if optimization was actually generated)
+        # Note: We ran it in parallel speculatively to save time. 
+        # We can discard it if needs_optimization is False, OR just show it anyway.
+        # User requested "needs optimization" logic. 
+        # If we want to strictly follow the logic, we check eval result.
         if results["evaluation"].get("needs_optimization", True):
-            print(">>> [ADK] Agent: Performance Optimizer running...")
-            opt_prompt = f"""
-            You are a Performance Engineer.
-            Optimize the following Python code for Time and Space complexity.
-            If the code is already optimal, just return the original.
-            
-            Return ONLY the Python code block.
-            
-            Code:
-            ```python
-            {code_content}
-            ```
-            """
-            opt_raw = self._generate(opt_prompt)
-            # Extract code
-            match = re.search(r'```python\s*(.*?)\s*```', opt_raw, re.DOTALL)
-            if match:
-                results["optimization"] = match.group(1)
-            else:
-                results["optimization"] = opt_raw # Fallback
+             match = re.search(r'```python\s*(.*?)\s*```', opt_res, re.DOTALL)
+             results["optimization"] = match.group(1) if match else opt_res
+        else:
+             results["optimization"] = None
 
         print(">>> [ADK] Workflow Complete.")
         return results

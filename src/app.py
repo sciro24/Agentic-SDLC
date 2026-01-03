@@ -13,6 +13,7 @@ class AnalysisResponse(BaseModel):
     documentation: str
     evaluation: Dict[str, Any]
     optimization: Optional[str] = None
+    original_code: str
     status: str
 
 # CORS Setup for Next.js
@@ -41,12 +42,13 @@ async def analyze_code(file: UploadFile):
         code_str = content.decode("utf-8")
         
         # Run the multi-agent workflow
-        result = workflow.run_workflow(code_str)
+        result = await workflow.run_workflow(code_str)
         
         return AnalysisResponse(
             documentation=result["documentation"],
             evaluation=result["evaluation"],
             optimization=result["optimization"],
+            original_code=code_str, # Return original code for diffing
             status="completed"
         )
     except Exception as e:

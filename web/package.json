@@ -8,8 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "diff": "^8.0.2",
     "next": "16.1.1",
     "react": "19.2.3",
+    "react-diff-viewer-continued": "^3.4.0",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1"
