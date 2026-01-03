@@ -82,6 +82,15 @@ Esempio log structure:
 *Screenshot: ADK Web UI Visualization (Placeholder)*
 > Immagina qui una visualizzazione a nodi del flusso di pensiero degli agenti.
 
+## ⚡️ Performance Benchmarks
+
+| Metric / Task | Execution Time (Naive) | Execution Time (Agent Optimized) | Speedup Factor |
+| :--- | :--- | :--- | :--- |
+| Risk Analysis (O(N) vs O(N^2)) | 0.1375s | 0.0014s | **100.0x** |
+| Sequence Generation (O(N) vs O(2^N)) | 1.3668s | 0.0001s | **22482.3x** |
+
+> *Dati generati tramite `src/benchmark_report.py` su ambiente locale.*
+
 ## 📂 Struttura Progetto
 *   `src/`: Codice sorgente agentico (`multi_agent_doc_gen.py`, `app.py`).
 *   `logs/`: Dump delle esecuzioni (Audit Trail).
