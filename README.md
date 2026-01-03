@@ -89,4 +89,4 @@ Esempio log structure:
 *   `requirements.txt`: Dipendenze (FastAPI, Google GenAI).
 
 ---
-*Progettato per dimostrare l'eccellenza nell'AI Engineering e nell'Agentic Design.*
+*Progettato realizzato da Diego Scirocco.*
