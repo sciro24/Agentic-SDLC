@@ -1,5 +1,5 @@
 :root {
-  /* Modern Clean Palette (Linear/Vercel inspired) */
+  /* Default Dark Mode */
   --bg-app: #0a0a0a;
   --bg-panel: #111111;
   --bg-surface: #1c1c1c;
@@ -11,9 +11,7 @@
   --text-muted: #52525b;
 
   --accent-blue: #3b82f6;
-  --accent-blue-dim: rgba(59, 130, 246, 0.1);
   --accent-green: #22c55e;
-  --accent-green-dim: rgba(34, 197, 94, 0.1);
 
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -23,8 +21,25 @@
   --font-mono: 'JetBrains Mono', 'Menlo', monospace;
 }
 
+[data-theme="light"] {
+  --bg-app: #ffffff;
+  --bg-panel: #f9fafb;
+  --bg-surface: #f3f4f6;
+  --border-subtle: #e5e7eb;
+  --border-accent: #d1d5db;
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+}
+
 * {
   box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
 }
 
 body {
@@ -33,6 +48,13 @@ body {
   font-family: var(--font-sans);
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hide Next.js badge if present */
+#__next-build-watcher,
+#__next-prerender-indicator {
+  display: none !important;
 }
 
 /* Layout Containers */
@@ -51,6 +73,7 @@ body {
   position: sticky;
   top: 0;
   height: 100vh;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .main-content {
@@ -69,14 +92,14 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 40px;
-  color: #fff;
+  color: var(--text-primary);
 }
 
 .brand-icon {
   width: 32px;
   height: 32px;
-  background: white;
-  color: black;
+  background: var(--text-primary);
+  color: var(--bg-app);
   border-radius: 8px;
   display: grid;
   place-items: center;
@@ -98,12 +121,12 @@ body {
 
 .nav-item:hover {
   background: var(--bg-surface);
-  color: white;
+  color: var(--text-primary);
 }
 
 .nav-item.active {
   background: var(--bg-surface);
-  color: white;
+  color: var(--text-primary);
   border-color: var(--border-subtle);
 }
 
@@ -150,10 +173,10 @@ body {
   letter-spacing: 1px;
 }
 
-/* Markdown Styles (GitHub Dark inspired) */
+/* Markdown Styles */
 .markdown-body {
   line-height: 1.6;
-  color: #e6edf3;
+  color: var(--text-primary);
 }
 
 .markdown-body h1,
@@ -166,23 +189,26 @@ body {
 }
 
 .markdown-body code {
-  background: rgba(110, 118, 129, 0.4);
+  background: var(--bg-surface);
   padding: 0.2em 0.4em;
   border-radius: 6px;
   font-family: var(--font-mono);
   font-size: 85%;
+  color: var(--text-primary);
 }
 
 .markdown-body pre {
-  background: #161b22;
+  background: var(--bg-panel);
   padding: 16px;
   border-radius: 6px;
   overflow: auto;
+  border: 1px solid var(--border-subtle);
 }
 
 .markdown-body pre code {
   background: transparent;
   padding: 0;
+  color: inherit;
 }
 
 .markdown-body blockquote {

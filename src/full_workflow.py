@@ -59,6 +59,12 @@ class ADKWorkflow:
         doc_prompt = f"""
         You are an expert Technical Writer using the Google ADK methodology.
         Generate comprehensive Markdown documentation for this code.
+        
+        CRITICAL INSTRUCTION:
+        Output ONLY the documentation content itself. 
+        Do NOT include any introductory or concluding meta-commentary like "Here is the documentation" or "This document adheres to..."
+        Start directly with the Title (H1).
+
         Include:
         - Overview
         - Function Signatures & Complexity (Big O)

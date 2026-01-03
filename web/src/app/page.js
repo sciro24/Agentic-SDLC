@@ -7,11 +7,14 @@ import ReactDiffViewer from 'react-diff-viewer-continued';
 // -- ICONS --
 const Icons = {
   Upload: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" /></svg>,
+  Home: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>,
   Docs: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><path d="M14 2v6h6" /><path d="M16 13H8" /><path d="M16 17H8" /><path d="M10 9H8" /></svg>,
   Check: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><path d="M22 4L12 14.01l-3-3" /></svg>,
   Code: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M16 18l6-6-6-6" /><path d="M8 6l-6 6 6 6" /></svg>,
+  Sun: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>,
+  Moon: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" /></svg>,
   Spinner: () => (
-    <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <svg className="animate-spin h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" style={{ color: 'var(--text-primary)' }}>
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
     </svg>
@@ -19,32 +22,6 @@ const Icons = {
   AgentWriter: () => <span title="Technical Writer Agent">✍️</span>,
   AgentAudit: () => <span title="Quality Auditor Agent">🔍</span>,
   AgentOpt: () => <span title="Performance Agent">⚡️</span>
-};
-
-// -- STYLES FOR DIFF VIEWER --
-const diffStyles = {
-  variables: {
-    dark: {
-      diffViewerBackground: '#0d1117',
-      diffViewerColor: '#FFF',
-      addedBackground: '#053119',
-      addedColor: '#white',
-      removedBackground: '#3f1112',
-      removedColor: '#white',
-      wordAddedBackground: '#135c34',
-      wordRemovedBackground: '#741f22',
-      addedGutterBackground: '#053119',
-      removedGutterBackground: '#3f1112',
-      gutterBackground: '#0d1117',
-      gutterColor: '#4f5662',
-    }
-  },
-  line: {
-    padding: '10px 2px',
-    '&:hover': {
-      background: 'transparent',
-    },
-  }
 };
 
 const AGENT_STEPS = [
@@ -59,6 +36,56 @@ export default function Home() {
   const [loadingStepIndex, setLoadingStepIndex] = useState(0);
   const [result, setResult] = useState(null);
   const [activeTab, setActiveTab] = useState('docs');
+  const [theme, setTheme] = useState('dark');
+
+  // Toggle Theme
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
+  // Styles for DiffViewer based on Theme
+  const diffStyles = {
+    variables: {
+      light: {
+        diffViewerBackground: '#f9fafb',
+        diffViewerColor: '#24292e',
+        addedBackground: '#e6ffed',
+        addedColor: '#24292e',
+        removedBackground: '#ffeef0',
+        removedColor: '#24292e',
+        wordAddedBackground: '#acf2bd',
+        wordRemovedBackground: '#fdb8c0',
+        addedGutterBackground: '#e6ffed',
+        removedGutterBackground: '#ffeef0',
+        gutterBackground: '#f7f7f7',
+        gutterColor: '#767676',
+        codeFoldGutterBackground: '#f9fafb',
+        codeFoldBackground: '#f1f8ff',
+      },
+      dark: {
+        diffViewerBackground: '#111111',
+        diffViewerColor: '#FFF',
+        addedBackground: '#044B53',
+        addedColor: 'white',
+        removedBackground: '#632F34',
+        removedColor: 'white',
+        wordAddedBackground: '#055d67',
+        wordRemovedBackground: '#7d383f',
+        addedGutterBackground: '#034148',
+        removedGutterBackground: '#632b30',
+        gutterBackground: '#111111',
+        gutterColor: '#4f5662',
+      }
+    },
+    line: {
+      padding: '10px 2px',
+      '&:hover': { background: 'transparent' },
+    }
+  };
 
   // Animation for Agent Steps
   useEffect(() => {
@@ -92,6 +119,13 @@ export default function Home() {
     }
   };
 
+  const handleReset = () => {
+    setResult(null);
+    setFile(null);
+    setActiveTab('docs');
+    setLoading(false);
+  };
+
   return (
     <div className="app-container">
       {/* SIDEBAR NAVIGATION */}
@@ -102,9 +136,18 @@ export default function Home() {
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <NavItem
+            label="Home"
+            icon={<Icons.Home />}
+            active={!result && !loading}
+            onClick={handleReset}
+            disabled={loading}
+          />
+          <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '4px 0' }} />
+
           {!result && !loading ? (
-            <div style={{ padding: '16px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '14px' }}>
-              Upload a file to start analysis
+            <div style={{ padding: '8px 12px', color: 'var(--text-muted)', fontSize: '13px' }}>
+              Upload to begin analysis
             </div>
           ) : (
             <>
@@ -133,9 +176,22 @@ export default function Home() {
           )}
         </nav>
 
-        <div style={{ marginTop: 'auto', paddingTop: '32px', fontSize: '12px', color: 'var(--text-muted)' }}>
-          Powered by Gemini 2.5 Flash
-          <br />Google ADK Framework
+        {/* THEME TOGGLE */}
+        <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+          <div
+            onClick={toggleTheme}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '10px',
+              padding: '10px', cursor: 'pointer', borderRadius: '6px',
+              color: 'var(--text-secondary)', fontSize: '14px',
+              transition: 'background 0.2s'
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-surface)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+          >
+            {theme === 'dark' ? <Icons.Sun /> : <Icons.Moon />}
+            <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+          </div>
         </div>
       </aside>
 
@@ -151,7 +207,6 @@ export default function Home() {
             height: '100%',
             gap: '40px'
           }}>
-            {/* Visual Steps Pipeline */}
             <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
               {AGENT_STEPS.map((step, idx) => {
                 const isActive = idx === loadingStepIndex;
@@ -163,7 +218,8 @@ export default function Home() {
                       borderRadius: '50%',
                       background: isActive ? 'var(--accent-blue)' : isPast ? 'var(--accent-green)' : 'var(--bg-surface)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '18px', fontWeight: 'bold'
+                      fontSize: '18px', fontWeight: 'bold',
+                      color: 'white'
                     }}>
                       {isPast ? '✓' : step.id}
                     </div>
@@ -180,6 +236,7 @@ export default function Home() {
                 )
               })}
             </div>
+            <Icons.Spinner />
           </div>
         )}
 
@@ -221,8 +278,8 @@ export default function Home() {
                   marginTop: '24px',
                   width: '100%',
                   padding: '12px 32px',
-                  backgroundColor: !file ? 'var(--border-subtle)' : 'white',
-                  color: !file ? 'var(--text-muted)' : 'black',
+                  backgroundColor: !file ? 'var(--border-subtle)' : 'var(--text-primary)',
+                  color: !file ? 'var(--text-muted)' : 'var(--bg-app)',
                   borderRadius: '8px',
                   fontWeight: 'bold',
                   cursor: !file ? 'not-allowed' : 'pointer',
@@ -274,7 +331,7 @@ export default function Home() {
                 </div>
 
                 <div style={{
-                  backgroundColor: 'rgba(255,255,255,0.03)',
+                  backgroundColor: 'var(--bg-panel)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: '12px',
                   padding: '32px'
@@ -306,11 +363,11 @@ export default function Home() {
                     padding: '60px',
                     border: '1px dashed var(--accent-green)',
                     borderRadius: '12px',
-                    background: 'rgba(34, 197, 94, 0.05)'
+                    background: 'var(--bg-surface)'
                   }}>
                     <span style={{ fontSize: '40px', marginBottom: '16px' }}>✅</span>
                     <h3 style={{ fontSize: '20px', fontWeight: 'bold', color: 'var(--accent-green)' }}>Code is already optimal!</h3>
-                    <p style={{ color: 'var(--text-secondary)' }}>The agent found no significant performance bottlenecks to patch.</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>No performance patches required.</p>
                   </div>
                 ) : (
                   <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
@@ -318,7 +375,7 @@ export default function Home() {
                       oldValue={result.original_code}
                       newValue={result.optimization}
                       splitView={true}
-                      useDarkTheme={true}
+                      useDarkTheme={theme === 'dark'}
                       styles={diffStyles}
                       leftTitle="Original Code"
                       rightTitle="Optimized Agent Patch"
@@ -344,7 +401,7 @@ function NavItem({ label, icon, active, onClick, disabled }) {
     >
       {icon}
       <span>{label}</span>
-      {active && <div style={{ marginLeft: 'auto', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'white' }} />}
+      {active && <div style={{ marginLeft: 'auto', width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--text-primary)' }} />}
     </div>
   );
 }
