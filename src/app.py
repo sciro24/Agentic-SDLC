@@ -1,31 +1,57 @@
 from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from src.multi_agent_doc_gen import AgenticDocGenerator
+from typing import Optional, Dict, Any
+from src.full_workflow import ADKWorkflow
 import uvicorn
 import os
 
-app = FastAPI(title="Agentic Doc Validator API", version="1.0")
-generator = AgenticDocGenerator()
+app = FastAPI(title="Agentic SDLC API", version="2.0")
 
-class DocResponse(BaseModel):
-    markdown_content: str
+# Input/Output Models
+class AnalysisResponse(BaseModel):
+    documentation: str
+    evaluation: Dict[str, Any]
+    optimization: Optional[str] = None
     status: str
 
-@app.post("/generate-docs", response_model=DocResponse)
-async def generate_docs(file: UploadFile):
+# CORS Setup for Next.js
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize Agents
+workflow = ADKWorkflow()
+
+@app.get("/")
+def health_check():
+    return {"status": "ok", "system": "Agentic SDLC"}
+
+@app.post("/analyze-code", response_model=AnalysisResponse)
+async def analyze_code(file: UploadFile):
     if not file.filename.endswith(".py"):
-        raise HTTPException(status_code=400, detail="Only .py files are allowed")
+        raise HTTPException(status_code=400, detail="Only .py files are supported.")
     
     try:
         content = await file.read()
         code_str = content.decode("utf-8")
         
-        # Run agentic workflow
-        final_doc = generator.generate_documentation(code_str)
+        # Run the multi-agent workflow
+        result = workflow.run_workflow(code_str)
         
-        return DocResponse(markdown_content=final_doc, status="optimized_and_approved")
+        return AnalysisResponse(
+            documentation=result["documentation"],
+            evaluation=result["evaluation"],
+            optimization=result["optimization"],
+            status="completed"
+        )
     except Exception as e:
+        print(f"Error during analysis: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("src.app:app", host="0.0.0.0", port=8000, reload=True)
