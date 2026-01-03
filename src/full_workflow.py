@@ -129,11 +129,23 @@ class ADKWorkflow:
         results["documentation"] = doc_res
         
         # Process Eval
+        # Process Eval
         try:
-             # Check if eval_res is an error string (if we didn't raise) - currently we raise.
-             # But just in case content is weird.
-            clean_json = re.sub(r'```json|```', '', eval_res).strip()
+             # Robust JSON extraction
+            clean_json = eval_res
+            # 1. Try regex for code block
+            match_code = re.search(r'```json\s*(.*?)\s*```', eval_res, re.DOTALL)
+            if match_code:
+                clean_json = match_code.group(1)
+            else:
+                 # 2. Try regex for any curly brace block (greedy)
+                match_brace = re.search(r'\{.*\}', eval_res, re.DOTALL)
+                if match_brace:
+                    clean_json = match_brace.group(0)
+            
+            # Clean comments if any (simple approach) or let json.loads try
             eval_data = json.loads(clean_json)
+            
             results["evaluation"] = {
                 "technical_accuracy": eval_data.get("scores", {}).get("technical_accuracy", 0),
                 "completeness": eval_data.get("scores", {}).get("completeness", 0),
