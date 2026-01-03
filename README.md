@@ -1,103 +1,121 @@
 # Agentic SDLC
+### An Autonomous Multi-Agent Framework for Self-Healing Documentation & Code Optimization
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)
-![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Google Gemini](https://img.shields.io/badge/Google%20Gemini-8E75B2?style=for-the-badge&logo=google&logoColor=white)
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+[![Python](https://img.shields.io/badge/Python-3.9%2B-blue?style=flat-square&logo=python&logoColor=white)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.109-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![Google Gemini](https://img.shields.io/badge/AI-Google%20Gemini-8E75B2?style=flat-square&logo=google&logoColor=white)](https://deepmind.google/technologies/gemini/)
+[![Next.js](https://img.shields.io/badge/Frontend-Next.js-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org)
+[![React](https://img.shields.io/badge/Library-React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Try_Now-success?style=for-the-badge&logo=vercel)](https://agentic-sdlc-iota.vercel.app/)
+<br/>
 
-## Overview
-Agentic SDLC is an intelligent, automated development tool designed to streamline the software lifecycle. Leveraging Google's advanced Gemini models and an Agentic workflow, it provides instant documentation, quality audits, and code optimization proposals through a unified, modern interface.
+<div align="center">
+  <a href="https://agentic-sdlc-iota.vercel.app/">
+    <img src="https://img.shields.io/badge/🚀_Try_Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" height="40" />
+  </a>
+</div>
 
-### [🚀 Try the Live Demo](https://agentic-sdlc-iota.vercel.app/)
+<br/>
 
-## Visual Walkthrough
+## 📖 Overview
+
+**Agentic SDLC** is a next-generation devtool that employs a swarm of autonomous AI agents to accelerate the Software Development Life Cycle. By analyzing your codebase in real-time, it instantly provides professional documentation, rigorous quality audits, and performance optimization patches—all without human intervention.
+
+Designed for modern developers, it features a security-first **Session-Key** architecture (zero persistence) and a premium dashboard for visualizing AI insights.
+
+---
+
+## 📸 Integrated Dashboard
 
 <div align="center">
   <img src="screenshots/Home.png" width="45%" alt="Home Dashboard" />
-  <img src="screenshots/Documentation.png" width="45%" alt="Documentation" />
+  <img src="screenshots/Documentation.png" width="45%" alt="Documentation Agent" />
 </div>
 <div align="center">
-  <img src="screenshots/Quality%20Report.png" width="45%" alt="Quality Audit" />
-  <img src="screenshots/Optimization.png" width="45%" alt="Optimization" />
+  <img src="screenshots/Quality%20Report.png" width="45%" alt="Quality Audit Agent" />
+  <img src="screenshots/Optimization.png" width="45%" alt="Optimization Agent" />
 </div>
 
-## Key Features
-- **Automated Documentation**: Utilizes a Technical Writer Agent to generate comprehensive, professional Markdown documentation.
-- **Quality Assurance**: A Quality Auditor Agent inspects code for accuracy, completeness, and readability.
-- **Performance Engineering**: A Performance Engineer Agent identifies bottlenecks and automatically proposes optimized code solutions.
-- **Parallel Processing**: Powered by `asyncio` for rapid, concurrent multi-agent analysis.
-- **Modern Dashboard**: A responsive Next.js web interface featuring Dark/Light modes, visual diffing, and real-time status updates.
+---
 
-## Architecture
-The system consists of two main components:
-1.  **Backend (Python/FastAPI)**: Orchestrates the multi-agent swarm using `google-genai`. It handles the prompt engineering and model fallback logic.
-2.  **Frontend (Next.js)**: Provides a premium user experience for file uploads, result visualization, and code comparison.
+## ✨ Key Features
 
-## Project Structure
-- `src/`: Core backend source code (API and Workflow Engine).
-- `web/`: Frontend application (Next.js).
-- `tests/`: Unit and integration tests.
-- `scripts/`: Utility and benchmark scripts.
-- `eval_set/`: Sample code files for evaluation.
+### 🤖 Multi-Agent Swarm
+Three specialized agents work in parallel using `asyncio` to deliver results in seconds:
+1.  **Technical Writer Agent**: Transforms raw code into beautiful, structured Markdown documentation.
+2.  **Quality Auditor Agent**: Performs static analysis to score Code Accuracy, Completeness, and Readability on a 10-point scale.
+3.  **Performance Engineer Agent**: Identifies O(n) bottlenecks and proposes optimized, pythonic refactors.
 
-## Installation
+### 🔒 Privacy & Security
+-   **Session-Only Mode**: Your API Key is injected into the browser session RAM and never saved to the server disk.
+-   **Ephemeral Processing**: Code is analyzed in memory and discarded immediately after report generation.
+
+### ⚡ Modern UX
+-   **Real-time Diff Viewer**: Compare original code vs. AI-optimized patches side-by-side.
+-   **Glassmorphism Design**: sleek Dark/Light mode interface built with Tailwind & CSS variables.
+-   **Interactive Feedback**: Visual loading steps showing which agent is currently active.
+
+---
+
+## 🏗 System Architecture
+
+The project follows a decoupled formatting architecture for maximum scalability:
+
+-   **Backend (Python/FastAPI)**:
+    -   Handles Agent Orchestration via `google-genai` SDK.
+    -   Implements robust error handling and fallback logic (Gemini 2.5 Flash -> 2.0 -> 1.5).
+    -   Exposes a stateless REST API via `uvicorn`.
+
+-   **Frontend (Next.js 14)**:
+    -   Built with the App Router and Server Components.
+    -   Responsive layout with custom `Inter` and `JetBrains Mono` typography.
+    -   Seamlessly connects to any deployed backend via Environment Variables.
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.9+
-- Node.js 18+
-- Google Gemini API Key
+-   Python 3.9+
+-   Node.js 18+
+-   A [Google Gemini API Key](https://aistudio.google.com/)
 
-### Backend Setup
-1.  Create a virtual environment:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate
-    ```
-2.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-3.  Configure Environment:
-    Create a `.env` file in the root directory:
-    ```env
-    GOOGLE_API_KEY=your_api_key_here
-    ```
-
-### Frontend Setup
-1.  Navigate to the web directory:
-    ```bash
-    cd web
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-
-## Usage
-
-### 1. Start the Backend
-From the project root:
+### 1. Clone & Setup Backend
 ```bash
+git clone https://github.com/sciro24/Agentic-SDLC.git
+cd Agentic-SDLC
+
+# Create Virtual Env
+python -m venv venv
+source venv/bin/activate
+
+# Install Deps
+pip install -r requirements.txt
+
+# Run Server (Port 8000)
 ./venv/bin/uvicorn src.app:app --reload
 ```
-The API will run at `http://localhost:8000`.
 
-### 2. Start the Frontend
-From the project root:
+### 2. Setup Frontend
 ```bash
-npm run dev --prefix web
+cd web
+npm install
+
+# Run Client (Port 3000)
+npm run dev
 ```
-The Dashboard will be accessible at `http://localhost:3000`.
 
-### 3. Analyze Code
-1.  Open the Dashboard.
-2.  Upload a Python (`.py`) file.
-3.  View the real-time analysis across Documentation, Quality Audit, and Optimization tabs.
+### 3. Usage
+Open `http://localhost:3000`. You will be prompted to enter your Google API Key securely. Once entered, drag & drop any `.py` file to start the swarm!
 
-## Credits
-Created by **Diego Scirocco**.
-Powered by Google Gemini Models.
+---
+
+## ☁️ Deployment
+
+Check out the [Deployment Guide](DEPLOYMENT.md) for detailed instructions on hosting with **Vercel** (Frontend) and **Render** (Backend).
+
+## 👨‍💻 Credits
+
+Architected and Developed by **Diego Scirocco**.
+*Powered by Google Deepmind Gemini Models.*
