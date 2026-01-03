@@ -30,6 +30,8 @@ const AGENT_STEPS = [
   { id: 3, label: "Performance Engineer", desc: "Optimizing logic..." },
 ];
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export default function Home() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -47,7 +49,7 @@ export default function Home() {
 
   const checkConfig = async () => {
     try {
-      const res = await fetch('http://localhost:8000/config/status');
+      const res = await fetch(`${API_URL}/config/status`);
       const data = await res.json();
       // If NOT configured on server, prompts for session key
       if (!data.is_configured) {
@@ -140,7 +142,7 @@ export default function Home() {
     }
 
     try {
-      const res = await fetch('http://localhost:8000/analyze-code', {
+      const res = await fetch(`${API_URL}/analyze-code`, {
         method: 'POST',
         body: formData,
         headers: headers // Browser handles multipart boundary correctly if body is FormData, but we can add custom headers
