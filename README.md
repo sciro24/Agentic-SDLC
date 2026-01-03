@@ -8,21 +8,14 @@
 [![React](https://img.shields.io/badge/Library-React-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
-<br/>
-
-<div align="center">
-  <a href="https://agentic-sdlc-iota.vercel.app/">
-    <img src="https://img.shields.io/badge/🚀_Try_Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" height="40" />
-  </a>
-</div>
-
-<br/>
 
 ## 📖 Overview
 
 **Agentic SDLC** is a next-generation devtool that employs a swarm of autonomous AI agents to accelerate the Software Development Life Cycle. By analyzing your codebase in real-time, it instantly provides professional documentation, rigorous quality audits, and performance optimization patches—all without human intervention.
 
 Designed for modern developers, it features a security-first **Session-Key** architecture (zero persistence) and a premium dashboard for visualizing AI insights.
+
+### [🚀 Try the Live Demo](https://agentic-sdlc-iota.vercel.app/)
 
 ---
 
@@ -110,10 +103,6 @@ npm run dev
 Open `http://localhost:3000`. You will be prompted to enter your Google API Key securely. Once entered, drag & drop any `.py` file to start the swarm!
 
 ---
-
-## ☁️ Deployment
-
-Check out the [Deployment Guide](DEPLOYMENT.md) for detailed instructions on hosting with **Vercel** (Frontend) and **Render** (Backend).
 
 ## 👨‍💻 Credits
 
