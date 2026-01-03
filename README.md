@@ -1,101 +1,81 @@
-# Agentic Doc Validator - Enterprise AI Edition
+# Agentic SDLC
 
-Piattaforma avanzata per la generazione automatica di documentazione tecnica tramite **Agenti AI Autonomi** (Writer, Reviewer, Evaluator, Optimizer). 
-Il sistema utilizza l'SDK Google GenAI per orchestrare un flusso di lavoro che simula un team di sviluppo umano.
+## Overview
+Agentic SDLC is an intelligent, automated development tool designed to streamline the software lifecycle. Leveraging Google's advanced Gemini models and an Agentic workflow, it provides instant documentation, quality audits, and code optimization proposals through a unified, modern interface.
 
-## 🌟 Key Features
+## Key Features
+- **Automated Documentation**: Utilizes a Technical Writer Agent to generate comprehensive, professional Markdown documentation.
+- **Quality Assurance**: A Quality Auditor Agent inspects code for accuracy, completeness, and readability.
+- **Performance Engineering**: A Performance Engineer Agent identifies bottlenecks and automatically proposes optimized code solutions.
+- **Parallel Processing**: Powered by `asyncio` for rapid, concurrent multi-agent analysis.
+- **Modern Dashboard**: A responsive Next.js web interface featuring Dark/Light modes, visual diffing, and real-time status updates.
 
-### 1. Multi-Agent Reasoning Loop
-Non un semplice script "genera testo". 4 Agenti collaborano:
-*   **Writer**: Analizza complessità O(n) e scrive.
-*   **Reviewer**: Critica logicamente la bozza.
-*   **Evaluator**: Assegna voti numerici (0-10) su accuratezza e completezza.
-*   **Optimizer**: Riscrive il codice Python se rileva inefficienze (Self-Healing).
+## Architecture
+The system consists of two main components:
+1.  **Backend (Python/FastAPI)**: Orchestrates the multi-agent swarm using `google-genai`. It handles the prompt engineering and model fallback logic.
+2.  **Frontend (Next.js)**: Provides a premium user experience for file uploads, result visualization, and code comparison.
 
-### 2. Observability & Tracing (New!)
-Ogni "pensiero" (prompt) e "azione" (response) degli agenti viene tracciato per debugging e auditing.
-*   **Logs**: `logs/trace_TIMESTAMP.json` contiene la conversazione completa.
-*   **Dashboard**: Il sistema è compatibile con visualizzatori JSON per ricostruire il flusso decisionale.
+## Project Structure
+- `src/`: Core backend source code (API and Workflow Engine).
+- `web/`: Frontend application (Next.js).
+- `tests/`: Unit and integration tests.
+- `scripts/`: Utility and benchmark scripts.
+- `eval_set/`: Sample code files for evaluation.
 
-### 3. Automated QA & Evaluation
-Include un "Gold Standard" dataset per validare le performance del modello in scenari critici:
-*   `eval_set/perfect_code.py`: Baseline.
-*   `eval_set/buggy_code.py`: Test rilevazione bug.
-*   `eval_set/inefficient_code.py`: Test capacità di ottimizzazione.
+## Installation
 
-## 🏗 Architettura
+### Prerequisites
+- Python 3.9+
+- Node.js 18+
+- Google Gemini API Key
 
-```mermaid
-graph TD
-    User -->|POST /generate-docs| API[FastAPI Microservice]
-    API --> Orchestrator
-    Orchestrator --> Writer
-    Writer -->|Draft| Reviewer
-    Reviewer -->|Critique| Writer
-    Writer -->|Final Draft| Evaluator
-    Evaluator -->|Score < 8.5| Writer
-    Evaluator -->|Score >= 8.5| DOCS[README.md]
-    Orchestrator -.->|Log Trace| JSON[logs/trace.json]
-```
+### Backend Setup
+1.  Create a virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
+    ```
+2.  Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Configure Environment:
+    Create a `.env` file in the root directory:
+    ```env
+    GOOGLE_API_KEY=your_api_key_here
+    ```
 
-## 🚀 Utilizzo
+### Frontend Setup
+1.  Navigate to the web directory:
+    ```bash
+    cd web
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
 
-### Installazione
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-# Configura .env con GOOGLE_API_KEY
-```
+## Usage
 
-### Comandi Rapidi
-
-**1. Lanciare il Microservizio API**
+### 1. Start the Backend
+From the project root:
 ```bash
 ./venv/bin/uvicorn src.app:app --reload
-# Endpoint: POST http://localhost:8000/generate-docs
 ```
+The API will run at `http://localhost:8000`.
 
-**2. Eseguire Workflow Documentale (CLI)**
+### 2. Start the Frontend
+From the project root:
 ```bash
-./venv/bin/python3 src/multi_agent_doc_gen.py
-# Output: DOCS_LOGIC.md e logs/trace_*.json
+npm run dev --prefix web
 ```
+The Dashboard will be accessible at `http://localhost:3000`.
 
-**3. Ottimizzazione Autonoma Codice**
-```bash
-./venv/bin/python3 src/optimizer_agent.py
-# Applica patch solo se i test passano!
-```
+### 3. Analyze Code
+1.  Open the Dashboard.
+2.  Upload a Python (`.py`) file.
+3.  View the real-time analysis across Documentation, Quality Audit, and Optimization tabs.
 
-## 📊 Dashboard & Monitoring (Simulated)
-
-Il sistema produce trace logs compatibili con i principali tool di LLM Observability. 
-Esempio log structure:
-```json
-{
-  "role": "Evaluator",
-  "thought_process_prompt": "Evaluate technical accuracy...",
-  "action_output": "{\"score\": 9.5, \"feedback\": \"Excellent O(N) analysis\"}"
-}
-```
-*Screenshot: ADK Web UI Visualization (Placeholder)*
-> Immagina qui una visualizzazione a nodi del flusso di pensiero degli agenti.
-
-## ⚡️ Performance Benchmarks
-
-| Metric / Task | Execution Time (Naive) | Execution Time (Agent Optimized) | Speedup Factor |
-| :--- | :--- | :--- | :--- |
-| Risk Analysis (O(N) vs O(N^2)) | 0.1375s | 0.0014s | **100.0x** |
-| Sequence Generation (O(N) vs O(2^N)) | 1.3668s | 0.0001s | **22482.3x** |
-
-> *Dati generati tramite `src/benchmark_report.py` su ambiente locale.*
-
-## 📂 Struttura Progetto
-*   `src/`: Codice sorgente agentico (`multi_agent_doc_gen.py`, `app.py`).
-*   `logs/`: Dump delle esecuzioni (Audit Trail).
-*   `eval_set/`: Dataset di validazione per QA.
-*   `requirements.txt`: Dipendenze (FastAPI, Google GenAI).
-
----
-*Progettato realizzato da Diego Scirocco.*
+## Credits
+Created by **Diego Scirocco**.
+Powered by Google Gemini Models.

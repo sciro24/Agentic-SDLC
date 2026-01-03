@@ -1,5 +1,4 @@
 google-genai
-google-adk
 python-dotenv
 fastapi
 python-multipart

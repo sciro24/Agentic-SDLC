@@ -19,10 +19,9 @@ class ADKWorkflow:
         self.model_candidates = [
             "gemini-2.5-flash", 
             "gemini-2.0-flash", 
-            "gemini-2.0-flash-lite-preview-02-05",
+            "gemini-2.0-flash-lite-preview-02-05", # Latest Preview
             "gemini-1.5-flash",
-            "gemini-1.5-pro",
-            "gemini-1.0-pro"
+            "gemini-1.5-pro"
         ]
 
     async def _generate_async(self, prompt: str) -> str:
@@ -41,10 +40,11 @@ class ADKWorkflow:
                 )
                 return res.text
             except Exception as e:
+                # print(f"Model {model} failed: {e}")
                 last_error = e
                 continue
         print(f"All models failed. Last error: {last_error}")
-        return f"Error: {last_error}"
+        raise RuntimeError(f"All AI models failed. Last error: {last_error}")
 
     async def run_workflow(self, code_content: str) -> Dict[str, Any]:
         results = {
@@ -117,13 +117,21 @@ class ADKWorkflow:
 
         print(">>> [ADK] Agents Running concurrently...")
         
-        # Wait for all
-        doc_res, eval_res, opt_res = await asyncio.gather(task_doc, task_eval, task_opt)
+        # Wait for all, allowing exceptions to bubble up if we want, or catching them.
+        # We need to catch individual failures so one failure doesn't crash others, potentially.
+        # BUT user said "if error, don't show sections". So failing the whole request is actually desired behavior.
+        try:
+            doc_res, eval_res, opt_res = await asyncio.gather(task_doc, task_eval, task_opt)
+        except Exception as e:
+            print(f"Workflow failed: {e}")
+            raise e # Re-raise to app.py which handles 500
 
         results["documentation"] = doc_res
         
         # Process Eval
         try:
+             # Check if eval_res is an error string (if we didn't raise) - currently we raise.
+             # But just in case content is weird.
             clean_json = re.sub(r'```json|```', '', eval_res).strip()
             eval_data = json.loads(clean_json)
             results["evaluation"] = {
