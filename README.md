@@ -1,9 +1,28 @@
 # Agentic SDLC
 
-![Home Dashboard](screenshots/Home.png)
-
 ## Overview
 Agentic SDLC is an intelligent, automated development tool designed to streamline the software lifecycle. Leveraging Google's advanced Gemini models and an Agentic workflow, it provides instant documentation, quality audits, and code optimization proposals through a unified, modern interface.
+
+## Visual Walkthrough
+
+<table width="100%">
+  <tr>
+    <th width="50%">Home Dashboard</th>
+    <th width="50%">Automated Documentation</th>
+  </tr>
+  <tr>
+    <td><img src="screenshots/Home.png" alt="Home Dashboard" /></td>
+    <td><img src="screenshots/Documentation.png" alt="Documentation Agent" /></td>
+  </tr>
+  <tr>
+    <th width="50%">Quality Audit</th>
+    <th width="50%">Optimization & Diffing</th>
+  </tr>
+  <tr>
+    <td><img src="screenshots/Quality%20Report.png" alt="Quality Audit Agent" /></td>
+    <td><img src="screenshots/Optimization.png" alt="Optimization Agent" /></td>
+  </tr>
+</table>
 
 ## Key Features
 - **Automated Documentation**: Utilizes a Technical Writer Agent to generate comprehensive, professional Markdown documentation.
@@ -11,20 +30,6 @@ Agentic SDLC is an intelligent, automated development tool designed to streamlin
 - **Performance Engineering**: A Performance Engineer Agent identifies bottlenecks and automatically proposes optimized code solutions.
 - **Parallel Processing**: Powered by `asyncio` for rapid, concurrent multi-agent analysis.
 - **Modern Dashboard**: A responsive Next.js web interface featuring Dark/Light modes, visual diffing, and real-time status updates.
-
-## Visual Walkthrough
-
-### 1. Automated Documentation
-The **Technical Writer Agent** generates professional-grade documentation directly from source code.
-![Documentation](screenshots/Documentation.png)
-
-### 2. Quality Audit
-The **Quality Auditor Agent** scores the code and identifies issues with a clean scorecard interface.
-![Quality Report](screenshots/Quality%20Report.png)
-
-### 3. Optimization & Diffing
-The **Performance Engineer Agent** proposes optimized code, visualized continuously with a side-by-side diff viewer.
-![Optimization](screenshots/Optimization.png)
 
 ## Architecture
 The system consists of two main components:
