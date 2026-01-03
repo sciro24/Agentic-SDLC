@@ -192,6 +192,9 @@ export default function Home() {
             {theme === 'dark' ? <Icons.Sun /> : <Icons.Moon />}
             <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
           </div>
+          <div style={{ marginTop: '8px', paddingLeft: '10px', fontSize: '12px', color: 'var(--text-muted)', fontWeight: '500' }}>
+            Author: Diego Scirocco
+          </div>
         </div>
       </aside>
 
