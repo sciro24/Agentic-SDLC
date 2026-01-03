@@ -51,10 +51,15 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Hide Next.js badge if present */
+/* Aggressively hide Next.js dev indicators */
 #__next-build-watcher,
-#__next-prerender-indicator {
+#__next-prerender-indicator,
+.nextjs-toast-errors-parent,
+nextjs-portal {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Layout Containers */
