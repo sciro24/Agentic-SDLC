@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class ADKWorkflow:
-    def __init__(self):
-        self.api_key = os.getenv("GOOGLE_API_KEY")
+    def __init__(self, api_key: Optional[str] = None):
+        self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY missing.")
         

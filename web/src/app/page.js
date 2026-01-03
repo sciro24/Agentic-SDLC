@@ -37,6 +37,32 @@ export default function Home() {
   const [result, setResult] = useState(null);
   const [activeTab, setActiveTab] = useState('docs');
   const [theme, setTheme] = useState('dark');
+  const [showConfigModal, setShowConfigModal] = useState(false);
+  const [clientApiKey, setClientApiKey] = useState(null); // Session-only key
+
+  // Check Config on Mount
+  useEffect(() => {
+    checkConfig();
+  }, []);
+
+  const checkConfig = async () => {
+    try {
+      const res = await fetch('http://localhost:8000/config/status');
+      const data = await res.json();
+      // If NOT configured on server, prompts for session key
+      if (!data.is_configured) {
+        setShowConfigModal(true);
+      }
+    } catch (e) {
+      console.log("Backend check failed", e);
+    }
+  };
+
+  const handleSetSessionKey = (key) => {
+    if (!key) return;
+    setClientApiKey(key);
+    setShowConfigModal(false);
+  };
 
   // Toggle Theme
   useEffect(() => {
@@ -107,13 +133,29 @@ export default function Home() {
     const formData = new FormData();
     formData.append('file', file);
 
+    // Headers: Add Session Key if exists
+    const headers = {};
+    if (clientApiKey) {
+      headers['x-goog-api-key'] = clientApiKey;
+    }
+
     try {
-      const res = await fetch('http://localhost:8000/analyze-code', { method: 'POST', body: formData });
+      const res = await fetch('http://localhost:8000/analyze-code', {
+        method: 'POST',
+        body: formData,
+        headers: headers // Browser handles multipart boundary correctly if body is FormData, but we can add custom headers
+      });
+
+      if (res.status === 401) {
+        setShowConfigModal(true);
+        throw new Error("API Key Required or Invalid");
+      }
       if (!res.ok) throw new Error('API Error');
+
       const data = await res.json();
       setResult(data);
     } catch (e) {
-      alert("API Error: " + e.message);
+      alert("Analysis Failed: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -128,6 +170,9 @@ export default function Home() {
 
   return (
     <div className="app-container">
+      {/* CONFIG MODAL */}
+      {showConfigModal && <ApiKeyModal onSave={handleSetSessionKey} />}
+
       {/* SIDEBAR NAVIGATION */}
       <aside className="sidebar">
         <div className="brand">
@@ -178,6 +223,16 @@ export default function Home() {
 
         {/* THEME TOGGLE */}
         <div style={{ marginTop: 'auto', paddingTop: '16px', borderTop: '1px solid var(--border-subtle)' }}>
+          {/* Update Key Button - Optional usage if needed */}
+          <div
+            onClick={() => setShowConfigModal(true)}
+            style={{ cursor: 'pointer', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            title="Change Session API Key"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
+            <span>Update Session Key</span>
+          </div>
+
           <div
             onClick={toggleTheme}
             style={{
@@ -438,6 +493,75 @@ function StatCard({ label, value }) {
     <div className="stat-card">
       <div className="stat-value" style={{ color }}>{value}</div>
       <div className="stat-label">{label}</div>
+    </div>
+  );
+}
+
+function ApiKeyModal({ onSave }) {
+  const [key, setKey] = useState('');
+  return (
+    <div style={{
+      position: 'fixed', inset: 0,
+      backgroundColor: 'rgba(0,0,0,0.85)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      zIndex: 100, backdropFilter: 'blur(5px)'
+    }}>
+      <div style={{
+        backgroundColor: 'var(--bg-panel)',
+        border: '1px solid var(--border-subtle)',
+        borderRadius: '16px',
+        padding: '32px',
+        width: '100%', maxWidth: '480px',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+      }}>
+        <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>Setup Google API Key</h2>
+        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', lineHeight: '1.5' }}>
+          This project utilizes Google Gemini 2.5 Flash. <br />
+          Please enter your API Key to initialize the Agent Swarm.
+        </p>
+
+        <input
+          type="password"
+          placeholder="Enter GOOGLE_API_KEY"
+          autoFocus
+          style={{
+            width: '100%',
+            backgroundColor: 'var(--bg-surface)',
+            border: '1px solid var(--border-subtle)',
+            padding: '14px',
+            borderRadius: '8px',
+            marginBottom: '16px',
+            color: 'var(--text-primary)',
+            fontSize: '16px',
+            outline: 'none'
+          }}
+          value={key}
+          onChange={e => setKey(e.target.value)}
+        />
+
+        <button
+          onClick={() => onSave(key)}
+          disabled={!key.trim()}
+          style={{
+            width: '100%',
+            backgroundColor: !key.trim() ? 'var(--border-subtle)' : 'var(--text-primary)',
+            color: !key.trim() ? 'var(--text-muted)' : 'var(--bg-app)',
+            fontWeight: 'bold',
+            padding: '14px',
+            borderRadius: '8px',
+            cursor: !key.trim() ? 'not-allowed' : 'pointer',
+            border: 'none',
+            fontSize: '16px',
+            transition: 'opacity 0.2s'
+          }}
+        >
+          Use Session Key (No Save)
+        </button>
+
+        <p style={{ marginTop: '24px', fontSize: '13px', color: 'var(--text-muted)', textAlign: 'center' }}>
+          This key will be used for the current session only.
+        </p>
+      </div>
     </div>
   );
 }
